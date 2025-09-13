@@ -50,3 +50,5 @@ Thumbs.db
 # Cache dari package manager
 .npm
 .pnp.*
+/generated/prisma
+/prisma/migrations

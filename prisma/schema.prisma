@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int    @id @default(autoincrement())
+  name      String
+  email     String @unique
+  password  String
+  isAdmin   Boolean
+  accessUser AcessUser[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AcessUser {
+  id  Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  userAccess String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Anime {
+  id           Int       @id @default(autoincrement())
+  title        String
+  title_jp     String?
+  title_en     String?
+  genreId      Int?
+  image_url    String?
+  synopsis     String?
+  type         String?
+  status       String?
+  season       String?
+  released_at  DateTime?
+  episodes     Episode[]
+  genres       Genre[]   @relation("AnimeGenres")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Episode {
+  id          Int        @id @default(autoincrement())
+  animeId     Int
+  anime       Anime      @relation(fields: [animeId], references: [id])
+  episode_num Int        // Nomor episode
+  title       String?    // Judul episode
+  aired_at    DateTime?  // Tanggal tayang
+  streams     Stream[]   // Link streaming
+  downloads   Download[] // Link download
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Stream {
+  id        Int      @id @default(autoincrement())
+  episodeId Int
+  episode   Episode  @relation(fields: [episodeId], references: [id])
+  quality   String   // 360p, 480p, 720p, 1080p
+  url       String   // Link streaming
+  provider  String?  // Misalnya "otakudesu" atau mirror
+}
+
+model Download {
+  id        Int      @id @default(autoincrement())
+  episodeId Int
+  episode   Episode  @relation(fields: [episodeId], references: [id])
+  quality   String   // 360p, 480p, 720p, 1080p
+  format    String   // mp4, mkv
+  url       String   // Link download
+  provider  String?  // Sumber link
+}
+
+model Genre {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  animes Anime[] @relation("AnimeGenres")
+}
