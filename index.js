@@ -6,8 +6,6 @@ const app = express();
 app.get("/", (req, res) => {
     // fetchHtml("https://otakudesu.best/anime-list/");
     const list = saveAnimeListToDb();
-
-    
     res.json({
         message: "Hello World",
         data: list
