@@ -1,13 +1,16 @@
 import express from "express";
-import { fetchHtml } from "./services/animeListScrape.js";
+import { fetchHtml, saveAnimeListToDb } from "./services/animeListScrape.js";
 
 const app = express();
 
 app.get("/", (req, res) => {
-    fetchHtml("https://otakudesu.best/anime-list/");
+    // fetchHtml("https://otakudesu.best/anime-list/");
+    const list = saveAnimeListToDb();
 
+    
     res.json({
-        message: "Hello World"
+        message: "Hello World",
+        data: list
     });
 })
 
