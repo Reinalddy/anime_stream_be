@@ -1,7 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { prisma } from "../config/prisma.js";
-// import { cheerio } from "cheerio";
 const BASE_URL = "https://otakudesu.best";
 export async function fetchHtml(url) {
     try {
@@ -15,16 +14,6 @@ export async function fetchHtml(url) {
 
         return res.data;
 
-        // GET ALL TITLE ANIME
-    
-        // console.log(res.data);
-        // const $ = cheerio.load(res.data);
-        // const animeList = [];
-
-        // // Ambil tiap list anime (.daftarkartun #abtext .bariskelom ul li)
-        // $('.daftarkartun #abtext .bariskelom ul li').each((index, element) => {
-        //     console.log($(element).text());
-        // })
     } catch (error) {
         console.error("Fetch error:", error.message);
         return null;
@@ -40,7 +29,7 @@ export async function getAnimeList() {
 
     $('.daftarkartun #abtext .bariskelom ul li').each((index, element) => {
         const title = $(element).text();
-        const url = BASE_URL + $(element).find('a').attr('href');
+        const url =  $(element).find('a').attr('href');
         list.push({ title, url });
     });
 
@@ -50,15 +39,16 @@ export async function getAnimeList() {
 export async function saveAnimeListToDb() {
     const list = await getAnimeList();
     try {
+
         for (const item of list) {
             console.log(item);
             await prisma.anime.create({
                 data: {
                     title: item.title,
+                    anime_url: item.url
                 }
             });
         }
-
 
         return list;
         

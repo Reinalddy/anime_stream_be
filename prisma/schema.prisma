@@ -41,6 +41,7 @@ model Anime {
   title_en     String?
   genreId      Int?
   image_url    String?
+  anime_url    String?
   synopsis     String?
   type         String?
   status       String?
