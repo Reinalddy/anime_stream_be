@@ -37,11 +37,17 @@ model AcessUser {
 model Anime {
   id           Int       @id @default(autoincrement())
   title        String
+  slug         String?
   title_jp     String?
   title_en     String?
   genreId      Int?
   image_url    String?
+  bacth_url    String?
   anime_url    String?
+  total_episode String?
+  studio       String?
+  rating       String?
+  genre        String?
   synopsis     String?
   type         String?
   status       String?
