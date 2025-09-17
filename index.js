@@ -1,5 +1,5 @@
 import express from "express";
-import { fetchHtml, saveAnimeListToDb, getDetailAnime, saveDetailAnimeToDb } from "./services/animeListScrape.js";
+import { fetchHtml, saveAnimeListToDb, getDetailAnime, saveDetailAnimeToDb } from "./services/animeScrape.js";
 
 const app = express();
 
