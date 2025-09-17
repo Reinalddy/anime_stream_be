@@ -123,3 +123,52 @@ export async function saveDetailAnimeToDb() {
 
     return detail;
 }
+
+export async function getAnimeEpsodeUrl(url) {
+    const html = await fetchHtml(url);
+    const $ = cheerio.load(html);
+
+    const episodeList = [];
+
+    
+}
+
+export async function getStatusAnime(title) {
+    const html = await fetchHtml(BASE_URL + "/anime-list/");
+    const $ = cheerio.load(html);
+
+    const onGoingElements = $(".OnGoing");
+
+    for (const element of onGoingElements) {
+        const title = $(element).text().trim();
+        const url = $(element).find("a").attr("href");
+        console.log(title);
+
+        const animeListFromDb = await prisma.anime.findFirst({
+            where: { title }
+        });
+
+        if (animeListFromDb) {
+            await prisma.anime.update({
+                where: { id: animeListFromDb.id },
+                data: { status: "on_going" }
+            });
+        }
+    }
+}
+
+export async function updateStatusAnime() {
+    const anime = await prisma.anime.findMany({
+        where: {
+            status: null
+        }
+    })
+
+    for (const item of anime) {
+        console.log(item);
+        await prisma.anime.update({
+            where: { id: item.id },
+            data: { status: "completed" }
+        });
+    }
+}

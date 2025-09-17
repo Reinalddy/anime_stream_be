@@ -1,5 +1,5 @@
 import express from "express";
-import { fetchHtml, saveAnimeListToDb, getDetailAnime, saveDetailAnimeToDb } from "./services/animeScrape.js";
+import { fetchHtml, saveAnimeListToDb, getDetailAnime, updateStatusAnime } from "./services/animeScrape.js";
 
 const app = express();
 
@@ -8,7 +8,7 @@ app.get("/", (req, res) => {
     // const list = saveAnimeListToDb();
     // const generateSlug = saveAnimeListToDb();
     // const test = getDetailAnime("https://ww3.anoboy.app/2023/04/oshi-no-ko-season-1-2/");
-    const test2 = saveDetailAnimeToDb();
+    const test2 = updateStatusAnime();
     res.json({
         message: "Hello World",
         data: test2
