@@ -172,3 +172,47 @@ export async function updateStatusAnime() {
         });
     }
 }
+
+export async function getAnimeOngoingEpisodeUrl() {
+
+    try {
+        const anime = await prisma.anime.findMany({
+            where: {
+                status: "on_going"
+            }
+        });
+    
+        for (const item of anime) {
+            let html = await fetchHtml(item.anime_url);
+            const $ = cheerio.load(html);
+
+            // CARI URL ANIME PER EPISODE
+            const animeClassId = ".singlelink .lcp_catlist li a";
+
+            // LOOPING SEMUA ELEMENT A
+            for (const element of $(animeClassId)) {
+                const url = $(element).attr("href");
+                const episodeNum = $(element).text();
+                // CREATE RECORD ANIME EPISODE
+                await prisma.episode.create({
+                    data: {
+                        animeId: item.id,
+                        episode_url: url,
+                        anime: item.title,
+                        episode_num: $(element).text()
+                    }
+                });
+                console.log(episodeNum);
+            }
+    
+        }
+        
+        console.log("update anime episode url done");
+
+        return anime;
+    } catch (error) {
+        console.log(error);
+        return null;
+        
+    }
+}
