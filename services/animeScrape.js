@@ -87,9 +87,6 @@ export async function getDetailAnime(url) {
     const genre = $(genreClass).find("td").eq(5).text().trim();
     const rating = $(ratingClass).find("td").eq(6).text().trim();
 
-
-    console.log(totalEpisode);
-    
     return {
         image: imageUrl,
         synopsis: synopsis,
@@ -129,8 +126,6 @@ export async function getAnimeEpsodeUrl(url) {
     const $ = cheerio.load(html);
 
     const episodeList = [];
-
-    
 }
 
 export async function getStatusAnime(title) {
